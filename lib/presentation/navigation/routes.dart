@@ -1,6 +1,7 @@
 import 'package:academic_project/presentation/auth/provider/auth_provider.dart';
 import 'package:academic_project/presentation/auth/screen/login_page.dart';
 import 'package:academic_project/presentation/auth/screen/sign_up.dart';
+import 'package:academic_project/presentation/notes/screens/notes_list_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -18,7 +19,7 @@ final routerProvider = Provider<GoRouter>((ref) {
         builder: (context, state) => const HomePage(),
       ),
       GoRoute(path: '/ai', builder: (context, state) => const HomePage()),
-      GoRoute(path: '/', builder: (context, state) => const HomePage()),
+      GoRoute(path: '/', builder: (context, state) => const NotesListPage()),
     ],
     redirect: (context, state) {
       final isLoggedIn = authState.value != null;

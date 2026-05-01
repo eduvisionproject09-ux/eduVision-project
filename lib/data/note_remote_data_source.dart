@@ -1,0 +1,54 @@
+import 'package:academic_project/domain/note.dart';
+import 'package:dio/dio.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+
+class NoteRemoteDataSource {
+  final Dio _dio = Dio(BaseOptions(baseUrl: 'http://localhost:8080/api/notes'));
+  final FlutterSecureStorage _storage = const FlutterSecureStorage();
+
+  Future<Options> _getOptions() async {
+    final token = await _storage.read(key: 'jwt');
+    return Options(headers: {'Authorization': 'Bearer $token'});
+  }
+
+  Future<List<Note>> fetchNotes() async {
+    final response = await _dio.get('', options: await _getOptions());
+    final List data = response.data['content'];
+    return data.map((e) => Note.fromJson(e)).toList();
+  }
+
+  Future<Note> createNote(String content, String subject, String topic) async {
+    final response = await _dio.post(
+      '',
+      data: {'content': content, 'subject': subject, 'topic': topic},
+      options: await _getOptions(),
+    );
+    return Note.fromJson(response.data);
+  }
+
+  Future<Note> updateNote(
+    int id,
+    String content,
+    String subject,
+    String topic,
+  ) async {
+    final response = await _dio.put(
+      '/$id',
+      data: {'content': content, 'subject': subject, 'topic': topic},
+      options: await _getOptions(),
+    );
+    return Note.fromJson(response.data);
+  }
+
+  Future<void> deleteNote(int id) async {
+    await _dio.delete('/$id', options: await _getOptions());
+  }
+
+  Future<Note> toggleBookmark(int id) async {
+    final response = await _dio.patch(
+      '/$id/bookmark',
+      options: await _getOptions(),
+    );
+    return Note.fromJson(response.data);
+  }
+}
