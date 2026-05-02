@@ -2,6 +2,7 @@ package com.academicproject.eduvisionbackend.dto;
 
 import lombok.*;
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Data
 @AllArgsConstructor
@@ -15,4 +16,5 @@ public class NoteResponseDto {
     private boolean bookmarked;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
+    private List<ResourceResponseDto> resources;
 }

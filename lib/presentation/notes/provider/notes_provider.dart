@@ -35,6 +35,15 @@ class NotesNotifier extends StateNotifier<AsyncValue<List<Note>>> {
     }
   }
 
+  Future<void> updateNote(int id, String content, String subject, String topic) async {
+    try {
+      await _dataSource.updateNote(id, content, subject, topic);
+      await fetchNotes();
+    } catch (e, stack) {
+      state = AsyncValue.error(e, stack);
+    }
+  }
+
   Future<void> deleteNote(int id) async {
     try {
       await _dataSource.deleteNote(id);

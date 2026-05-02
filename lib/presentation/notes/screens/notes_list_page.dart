@@ -163,7 +163,7 @@ class _NoteCard extends StatelessWidget {
     final theme = Theme.of(context);
     return Card(
       child: InkWell(
-        onTap: () {},
+        onTap: () => context.push('/note', extra: note),
         borderRadius: BorderRadius.circular(16),
         child: Padding(
           padding: const EdgeInsets.all(16.0),

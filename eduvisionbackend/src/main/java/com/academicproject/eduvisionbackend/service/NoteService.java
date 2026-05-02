@@ -6,10 +6,16 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 import com.academicproject.eduvisionbackend.dto.NoteCreateDto;
 import com.academicproject.eduvisionbackend.dto.NoteResponseDto;
+import com.academicproject.eduvisionbackend.dto.ResourceResponseDto;
 import com.academicproject.eduvisionbackend.entity.Note;
+import com.academicproject.eduvisionbackend.entity.Resource;
 import com.academicproject.eduvisionbackend.entity.User;
 import com.academicproject.eduvisionbackend.repository.NoteRepository;
 import com.academicproject.eduvisionbackend.repository.UserRepository;
@@ -23,11 +29,15 @@ public class NoteService {
     @Autowired
     private UserRepository userRepository;
 
+    @Autowired
+    private ResourceService resourceService;
+
     private User getCurrentUser() {
         UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         return userRepository.findByUsername(userDetails.getUsername()).orElseThrow();
     }
 
+    @Transactional
     public NoteResponseDto createNote(NoteCreateDto dto) {
         User user = getCurrentUser();
         Note note = Note.builder()
@@ -40,11 +50,13 @@ public class NoteService {
         return mapToDto(saved);
     }
 
+    @Transactional(readOnly = true)
     public Page<NoteResponseDto> getAllNotes(Pageable pageable) {
         User user = getCurrentUser();
         return noteRepository.findByUser(user, pageable).map(this::mapToDto);
     }
 
+    @Transactional(readOnly = true)
     public NoteResponseDto getNoteById(Long id) {
         Note note = noteRepository.findById(id).orElseThrow();
         // Check if note belongs to user
@@ -54,6 +66,7 @@ public class NoteService {
         return mapToDto(note);
     }
 
+    @Transactional
     public NoteResponseDto updateNote(Long id, NoteCreateDto dto) {
         Note note = noteRepository.findById(id).orElseThrow();
         if (!note.getUser().getId().equals(getCurrentUser().getId())) {
@@ -73,6 +86,7 @@ public class NoteService {
         noteRepository.delete(note);
     }
 
+    @Transactional
     public NoteResponseDto toggleBookmark(Long id) {
         Note note = noteRepository.findById(id).orElseThrow();
         if (!note.getUser().getId().equals(getCurrentUser().getId())) {
@@ -82,7 +96,14 @@ public class NoteService {
         return mapToDto(noteRepository.save(note));
     }
 
-    private NoteResponseDto mapToDto(Note note) {
+    public NoteResponseDto mapToDto(Note note) {
+        List<ResourceResponseDto> resourceDtos = null;
+        if (note.getResources() != null) {
+            resourceDtos = note.getResources().stream()
+                    .map(resource -> resourceService.mapToDto(resource))
+                    .collect(Collectors.toList());
+        }
+
         return NoteResponseDto.builder()
                 .id(note.getId())
                 .content(note.getContent())
@@ -91,6 +112,7 @@ public class NoteService {
                 .bookmarked(note.isBookmarked())
                 .createdAt(note.getCreatedAt())
                 .updatedAt(note.getUpdatedAt())
+                .resources(resourceDtos)
                 .build();
     }
 }
