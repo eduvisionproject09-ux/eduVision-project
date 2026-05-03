@@ -8,6 +8,7 @@ import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:go_router/go_router.dart';
 
 class NoteDetailPage extends ConsumerStatefulWidget {
   final Note note;
@@ -137,6 +138,11 @@ class _NoteDetailPageState extends ConsumerState<NoteDetailPage> {
           ),
         ),
         actions: [
+          IconButton(
+            icon: const Icon(Icons.psychology_outlined, color: Colors.blueAccent),
+            tooltip: 'Ask AI',
+            onPressed: () => context.push('/ai?noteId=${_currentNote.id}'),
+          ),
           if (!_isEditing)
             IconButton(
               icon: const Icon(Icons.edit, color: Colors.white70),

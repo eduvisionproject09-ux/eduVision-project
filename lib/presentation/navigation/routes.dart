@@ -3,6 +3,7 @@ import 'package:academic_project/presentation/auth/screen/login_page.dart';
 import 'package:academic_project/presentation/auth/screen/sign_up.dart';
 import 'package:academic_project/presentation/notes/screens/notes_list_page.dart';
 import 'package:academic_project/presentation/notes/screens/note_detail_page.dart';
+import 'package:academic_project/presentation/ai/screens/ai_assistant_screen.dart';
 import 'package:academic_project/domain/note.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -20,7 +21,13 @@ final routerProvider = Provider<GoRouter>((ref) {
         path: '/resources',
         builder: (context, state) => const HomePage(),
       ),
-      GoRoute(path: '/ai', builder: (context, state) => const HomePage()),
+      GoRoute(
+        path: '/ai',
+        builder: (context, state) {
+          final noteId = state.uri.queryParameters['noteId'];
+          return AiAssistantScreen(noteId: noteId != null ? int.tryParse(noteId) : null);
+        },
+      ),
       GoRoute(path: '/', builder: (context, state) => const NotesListPage()),
       GoRoute(
         path: '/note',
