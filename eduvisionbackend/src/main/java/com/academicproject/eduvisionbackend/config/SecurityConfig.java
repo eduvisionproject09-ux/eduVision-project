@@ -52,7 +52,7 @@ public class SecurityConfig {
         http.cors(cors -> cors.configurationSource(corsConfigurationSource()))
                 .csrf(csrf -> csrf.disable())
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-                .authorizeHttpRequests(auth -> auth.requestMatchers("/api/auth/**", "/error").permitAll()
+                .authorizeHttpRequests(auth -> auth.requestMatchers("/api/auth/**", "/api/profile/images/**", "/error").permitAll()
                         .anyRequest().authenticated());
 
         http.authenticationProvider(authenticationProvider());

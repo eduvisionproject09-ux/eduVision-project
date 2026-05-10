@@ -9,5 +9,4 @@ public class EduvisionbackendApplication {
 	public static void main(String[] args) {
 		SpringApplication.run(EduvisionbackendApplication.class, args);
 	}
-
 }

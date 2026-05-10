@@ -15,193 +15,294 @@ class _SignupPageState extends ConsumerState<SignupPage> {
   final _usernameController = TextEditingController();
   final _passwordController = TextEditingController();
   final _emailController = TextEditingController();
+  bool _isPasswordVisible = false;
 
   @override
   Widget build(BuildContext context) {
     final authState = ref.watch(authProvider);
-    final theme = Theme.of(context);
+    final size = MediaQuery.of(context).size;
 
     return Scaffold(
+      backgroundColor: const Color(0xFF0F172A),
       body: Stack(
         children: [
-          // Background Gradient
-          Container(
-            decoration: BoxDecoration(
-              gradient: LinearGradient(
-                begin: Alignment.topLeft,
-                end: Alignment.bottomRight,
-                colors: [
-                  theme.scaffoldBackgroundColor,
-                  theme.colorScheme.primary.withOpacity(0.1),
-                  theme.scaffoldBackgroundColor,
-                ],
-              ),
+          // Background Shapes
+          Positioned(
+            top: -100,
+            left: -100,
+            child: _buildBlurCircle(
+              300,
+              const Color(0xFF8B5CF6).withOpacity(0.2),
             ),
           ),
+          Positioned(
+            bottom: -50,
+            right: -50,
+            child: _buildBlurCircle(
+              250,
+              const Color(0xFF10B981).withOpacity(0.15),
+            ),
+          ),
+
           Center(
             child: SingleChildScrollView(
-              padding: const EdgeInsets.all(24.0),
-              child: Container(
-                constraints: const BoxConstraints(maxWidth: 400),
-                padding: const EdgeInsets.all(32.0),
-                decoration: BoxDecoration(
-                  color:
-                      theme.cardTheme.color?.withOpacity(0.8) ??
-                      Colors.white.withOpacity(0.8),
-                  borderRadius: BorderRadius.circular(24),
-                  border: Border.all(color: Colors.black.withOpacity(0.1)),
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.black.withOpacity(0.2),
-                      blurRadius: 20,
-                      offset: const Offset(0, 10),
+              padding: const EdgeInsets.symmetric(horizontal: 24.0),
+              child: Column(
+                children: [
+                  _buildHeaderIcon()
+                      .animate()
+                      .fadeIn(duration: 800.ms)
+                      .scale(begin: const Offset(0.8, 0.8)),
+                  const SizedBox(height: 40),
+
+                  Container(
+                    constraints: const BoxConstraints(maxWidth: 450),
+                    padding: const EdgeInsets.all(40.0),
+                    decoration: BoxDecoration(
+                      color: Colors.white.withOpacity(0.05),
+                      borderRadius: BorderRadius.circular(32),
+                      border: Border.all(color: Colors.white.withOpacity(0.1)),
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.black.withOpacity(0.3),
+                          blurRadius: 40,
+                          offset: const Offset(0, 20),
+                        ),
+                      ],
                     ),
-                  ],
-                ),
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                  children: [
-                    // Header section
-                    Center(
-                      child: Column(
-                        children: [
-                          Container(
-                            padding: const EdgeInsets.all(16),
-                            decoration: BoxDecoration(
-                              color: theme.colorScheme.secondary.withOpacity(
-                                0.1,
-                              ),
-                              shape: BoxShape.circle,
-                            ),
-                            child: Icon(
-                              Icons.person_add_rounded,
-                              size: 48,
-                              color: theme.colorScheme.secondary,
-                            ),
-                          ).animate().scale(
-                            duration: 600.ms,
-                            curve: Curves.easeOutBack,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                      children: [
+                        Text(
+                          'Create Account',
+                          style: TextStyle(
+                            fontSize: 32,
+                            fontWeight: FontWeight.w800,
+                            color: Colors.white,
+                            letterSpacing: -0.5,
                           ),
-                          const SizedBox(height: 16),
-                          Text(
-                            'Create Account',
-                            style: theme.textTheme.headlineMedium?.copyWith(
-                              fontWeight: FontWeight.bold,
-                              letterSpacing: 1.2,
-                            ),
-                          ).animate().fadeIn(delay: 200.ms),
-                          Text(
-                            'Join the future of learning',
-                            style: theme.textTheme.bodyMedium?.copyWith(
-                              color: Colors.grey,
-                            ),
-                          ).animate().fadeIn(delay: 400.ms),
-                        ],
-                      ),
-                    ),
-                    const SizedBox(height: 40),
+                          textAlign: TextAlign.center,
+                        ).animate().fadeIn(delay: 200.ms).slideY(begin: 0.2),
+                        const SizedBox(height: 8),
+                        Text(
+                          'Join thousands of students on EduVision',
+                          style: TextStyle(
+                            fontSize: 16,
+                            color: Colors.white.withOpacity(0.6),
+                          ),
+                          textAlign: TextAlign.center,
+                        ).animate().fadeIn(delay: 300.ms).slideY(begin: 0.2),
+                        const SizedBox(height: 48),
 
-                    TextField(
-                      controller: _usernameController,
-                      decoration: const InputDecoration(
-                        labelText: 'Username',
-                        prefixIcon: Icon(Icons.person_outline),
-                      ),
-                    ).animate().slideX(begin: -0.1, delay: 500.ms).fadeIn(),
-                    const SizedBox(height: 16),
+                        _buildTextField(
+                          controller: _usernameController,
+                          label: 'Username',
+                          icon: Icons.person_outline_rounded,
+                        ).animate().fadeIn(delay: 400.ms).slideX(begin: -0.1),
+                        const SizedBox(height: 20),
 
-                    TextField(
-                      controller: _emailController,
-                      decoration: const InputDecoration(
-                        labelText: 'Email',
-                        prefixIcon: Icon(Icons.email_outlined),
-                      ),
-                    ).animate().slideX(begin: 0.1, delay: 600.ms).fadeIn(),
-                    const SizedBox(height: 16),
+                        _buildTextField(
+                          controller: _emailController,
+                          label: 'Email',
+                          icon: Icons.email_outlined,
+                        ).animate().fadeIn(delay: 500.ms).slideX(begin: 0.1),
+                        const SizedBox(height: 20),
 
-                    TextField(
-                      controller: _passwordController,
-                      decoration: const InputDecoration(
-                        labelText: 'Password',
-                        prefixIcon: Icon(Icons.lock_outline),
-                      ),
-                      obscureText: true,
-                    ).animate().slideX(begin: -0.1, delay: 700.ms).fadeIn(),
-                    const SizedBox(height: 32),
+                        _buildTextField(
+                          controller: _passwordController,
+                          label: 'Password',
+                          icon: Icons.lock_outline_rounded,
+                          isPassword: true,
+                          isPasswordVisible: _isPasswordVisible,
+                          onToggleVisibility: () => setState(
+                            () => _isPasswordVisible = !_isPasswordVisible,
+                          ),
+                        ).animate().fadeIn(delay: 600.ms).slideX(begin: -0.1),
+                        const SizedBox(height: 32),
 
-                    if (authState.isLoading)
-                      const Center(child: CircularProgressIndicator())
-                    else
-                      ElevatedButton(
-                            onPressed: () {
-                              ref
-                                  .read(authProvider.notifier)
-                                  .signup(
-                                    _usernameController.text,
-                                    _emailController.text,
-                                    _passwordController.text,
-                                  );
-                            },
-                            style: ElevatedButton.styleFrom(
-                              padding: const EdgeInsets.symmetric(vertical: 16),
-                              backgroundColor: theme.colorScheme.secondary,
-                            ),
-                            child: const Text('Sign Up'),
-                          )
-                          .animate()
-                          .fadeIn(delay: 800.ms)
-                          .scale(begin: const Offset(0.9, 0.9)),
+                        _buildSignupButton(
+                          authState,
+                        ).animate().fadeIn(delay: 700.ms).scale(),
+                        const SizedBox(height: 32),
 
-                    const SizedBox(height: 16),
-                    TextButton(
-                      onPressed: () => context.go('/login'),
-                      child: RichText(
-                        text: TextSpan(
-                          style: theme.textTheme.bodyMedium,
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
                           children: [
-                            const TextSpan(text: "Already have an account? "),
-                            TextSpan(
-                              text: 'Login',
+                            Text(
+                              "Already have an account? ",
                               style: TextStyle(
-                                color: theme.colorScheme.secondary,
-                                fontWeight: FontWeight.bold,
+                                color: Colors.white.withOpacity(0.6),
+                              ),
+                            ),
+                            GestureDetector(
+                              onTap: () => context.go('/login'),
+                              child: Text(
+                                'Login',
+                                style: TextStyle(
+                                  color: const Color(0xFF8B5CF6),
+                                  fontWeight: FontWeight.bold,
+                                ),
                               ),
                             ),
                           ],
-                        ),
-                      ),
-                    ).animate().fadeIn(delay: 900.ms),
+                        ).animate().fadeIn(delay: 800.ms),
 
-                    if (authState.hasError)
-                      Padding(
-                        padding: const EdgeInsets.only(top: 16),
-                        child: Container(
-                          padding: const EdgeInsets.all(12),
-                          decoration: BoxDecoration(
-                            color: Colors.red.withOpacity(0.1),
-                            borderRadius: BorderRadius.circular(8),
-                            border: Border.all(
-                              color: Colors.red.withOpacity(0.3),
-                            ),
-                          ),
-                          child: Text(
-                            'Error: ${authState.error}',
-                            textAlign: TextAlign.center,
-                            style: const TextStyle(
-                              color: Colors.redAccent,
-                              fontSize: 13,
-                            ),
-                          ),
-                        ),
-                      ).animate().shake(),
-                  ],
-                ),
+                        if (authState.hasError)
+                          _buildErrorLabel(authState.error.toString()),
+                      ],
+                    ),
+                  ).animate().fadeIn(duration: 600.ms).slideY(begin: 0.1),
+                ],
               ),
             ),
           ),
         ],
       ),
     );
+  }
+
+  Widget _buildBlurCircle(double size, Color color) {
+    return Container(
+          width: size,
+          height: size,
+          decoration: BoxDecoration(color: color, shape: BoxShape.circle),
+        )
+        .animate(onPlay: (controller) => controller.repeat(reverse: true))
+        .move(
+          duration: 6.seconds,
+          begin: const Offset(-20, 20),
+          end: const Offset(20, -20),
+        );
+  }
+
+  Widget _buildHeaderIcon() {
+    return Container(
+      padding: const EdgeInsets.all(20),
+      decoration: BoxDecoration(
+        gradient: const LinearGradient(
+          colors: [Color(0xFF8B5CF6), Color(0xFF10B981)],
+        ),
+        borderRadius: BorderRadius.circular(24),
+        boxShadow: [
+          BoxShadow(
+            color: const Color(0xFF8B5CF6).withOpacity(0.3),
+            blurRadius: 20,
+            offset: const Offset(0, 10),
+          ),
+        ],
+      ),
+      child: const Icon(
+        Icons.person_add_rounded,
+        size: 48,
+        color: Colors.white,
+      ),
+    );
+  }
+
+  Widget _buildTextField({
+    required TextEditingController controller,
+    required String label,
+    required IconData icon,
+    bool isPassword = false,
+    bool isPasswordVisible = false,
+    VoidCallback? onToggleVisibility,
+  }) {
+    return Container(
+      decoration: BoxDecoration(
+        color: Colors.white.withOpacity(0.05),
+        borderRadius: BorderRadius.circular(16),
+        border: Border.all(color: Colors.white.withOpacity(0.1)),
+      ),
+      child: TextField(
+        controller: controller,
+        obscureText: isPassword && !isPasswordVisible,
+        style: const TextStyle(color: Colors.white),
+        decoration: InputDecoration(
+          labelText: label,
+          labelStyle: TextStyle(color: Colors.white.withOpacity(0.5)),
+          prefixIcon: Icon(icon, color: Colors.white.withOpacity(0.5)),
+          suffixIcon: isPassword
+              ? IconButton(
+                  icon: Icon(
+                    isPasswordVisible
+                        ? Icons.visibility_off_rounded
+                        : Icons.visibility_rounded,
+                    color: Colors.white.withOpacity(0.5),
+                  ),
+                  onPressed: onToggleVisibility,
+                )
+              : null,
+          border: InputBorder.none,
+          contentPadding: const EdgeInsets.symmetric(
+            horizontal: 20,
+            vertical: 16,
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildSignupButton(AsyncValue authState) {
+    return ElevatedButton(
+      onPressed: authState.isLoading
+          ? null
+          : () {
+              ref
+                  .read(authProvider.notifier)
+                  .signup(
+                    _usernameController.text,
+                    _emailController.text,
+                    _passwordController.text,
+                  );
+            },
+      style: ElevatedButton.styleFrom(
+        backgroundColor: const Color(0xFF8B5CF6),
+        foregroundColor: Colors.white,
+        padding: const EdgeInsets.symmetric(vertical: 20),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+        elevation: 0,
+      ),
+      child: authState.isLoading
+          ? const SizedBox(
+              height: 20,
+              width: 20,
+              child: CircularProgressIndicator(
+                strokeWidth: 2,
+                color: Colors.white,
+              ),
+            )
+          : const Text(
+              'Create Account',
+              style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+            ),
+    );
+  }
+
+  Widget _buildErrorLabel(String error) {
+    return Container(
+      margin: const EdgeInsets.only(top: 24),
+      padding: const EdgeInsets.all(12),
+      decoration: BoxDecoration(
+        color: Colors.redAccent.withOpacity(0.1),
+        borderRadius: BorderRadius.circular(12),
+        border: Border.all(color: Colors.redAccent.withOpacity(0.3)),
+      ),
+      child: Row(
+        children: [
+          const Icon(
+            Icons.error_outline_rounded,
+            color: Colors.redAccent,
+            size: 20,
+          ),
+          const SizedBox(width: 12),
+          Expanded(
+            child: Text(
+              error,
+              style: const TextStyle(color: Colors.redAccent, fontSize: 13),
+            ),
+          ),
+        ],
+      ),
+    ).animate().shake();
   }
 }

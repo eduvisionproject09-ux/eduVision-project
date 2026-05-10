@@ -60,4 +60,18 @@ class AppTheme {
       ),
     );
   }
+  static ThemeData get lightTheme {
+    return ThemeData(
+      useMaterial3: true,
+      brightness: Brightness.light,
+      primaryColor: primaryColor,
+      scaffoldBackgroundColor: const Color(0xFFEFF6FF), // gradientStart
+      colorScheme: const ColorScheme.light(
+        primary: primaryColor,
+        secondary: secondaryColor,
+        surface: Colors.white,
+      ),
+      textTheme: GoogleFonts.outfitTextTheme(ThemeData.light().textTheme),
+    );
+  }
 }

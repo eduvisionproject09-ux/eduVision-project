@@ -1,10 +1,9 @@
+import 'package:academic_project/data/ai_remote_data_source.dart';
 import 'package:academic_project/domain/ai_response.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:dio/dio.dart';
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 final aiProvider = StateNotifierProvider<AiNotifier, AiState>((ref) {
-  return AiNotifier();
+  return AiNotifier(AiRemoteDataSource());
 });
 
 class AiState {
@@ -24,24 +23,24 @@ class AiState {
 }
 
 class AiNotifier extends StateNotifier<AiState> {
-  AiNotifier() : super(AiState());
-
-  final _dio = Dio(BaseOptions(baseUrl: 'http://localhost:8080/api/ai'));
-  final _storage = const FlutterSecureStorage();
+  final AiRemoteDataSource _dataSource;
+  AiNotifier(this._dataSource) : super(AiState());
 
   Future<void> askAi(String prompt) async {
     state = state.copyWith(isLoading: true, error: null);
     try {
-      final token = await _storage.read(key: 'jwt');
-      final response = await _dio.post(
-        '/ask',
-        data: {'prompt': prompt},
-        options: Options(headers: {'Authorization': 'Bearer $token'}),
-      );
-      final aiResponse = AiResponse.fromJson(response.data);
+      final aiResponse = await _dataSource.askAi(prompt);
       state = state.copyWith(isLoading: false, response: aiResponse);
     } catch (e) {
-      state = state.copyWith(isLoading: false, error: e.toString());
+      String errorMessage = "Failed to get AI response. Please try again.";
+      if (e is Exception) {
+        errorMessage = e.toString();
+      }
+      state = state.copyWith(isLoading: false, error: errorMessage);
     }
+  }
+
+  void clearResponse() {
+    state = AiState();
   }
 }

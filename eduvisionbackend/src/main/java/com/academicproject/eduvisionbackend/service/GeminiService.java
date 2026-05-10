@@ -26,7 +26,8 @@ public class GeminiService {
         String url = API_URL + apiKey;
 
         String systemPrompt = "You are an AI academic assistant for students. " +
-                "For any concept provided, you must return a JSON object with exactly three fields: " +
+                "For any concept provided, you must return a JSON object with exactly four fields: " +
+                "\"topic\" (the name of the concept), " +
                 "\"academicDefinition\" (a formal, high-level academic definition), " +
                 "\"simpleDefinition\" (a definition in very simple terms for easy understanding), " +
                 "\"examStandardDescription\" (a detailed explanation suitable for writing in an exam). " +
@@ -44,16 +45,21 @@ public class GeminiService {
             JsonNode root = objectMapper.readTree(responseStr);
             String textResponse = root.path("candidates").get(0).path("content").path("parts").get(0).path("text").asText();
             
-            // Cleanup in case Gemini includes markdown code blocks
-            textResponse = textResponse.replaceAll("```json", "").replaceAll("```", "").trim();
+            // Robust cleanup to extract JSON even if Gemini adds conversational text
+            int start = textResponse.indexOf("{");
+            int end = textResponse.lastIndexOf("}");
+            if (start != -1 && end != -1 && end > start) {
+                textResponse = textResponse.substring(start, end + 1);
+            }
             
             return objectMapper.readValue(textResponse, AiResponse.class);
         } catch (Exception e) {
-            e.printStackTrace();
+            System.err.println("Error calling Gemini API: " + e.getMessage());
             return AiResponse.builder()
+                    .topic(prompt)
                     .academicDefinition("Error retrieving definition.")
-                    .simpleDefinition("Something went wrong.")
-                    .examStandardDescription("Could not fetch details: " + e.getMessage())
+                    .simpleDefinition("Something went wrong with the AI service.")
+                    .examStandardDescription("Details: " + e.getMessage())
                     .build();
         }
     }
