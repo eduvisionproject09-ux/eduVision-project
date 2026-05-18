@@ -72,7 +72,7 @@ final routerProvider2 = Provider<GoRouter>((ref) {
           state.matchedLocation == '/signup';
 
       if (!isLoggedIn && !isLoggingIn) return '/login';
-      if (isLoggedIn && isLoggingIn) return '/dashboard';
+      if (isLoggedIn && isLoggingIn) return '/smartnotes';
 
       return null;
     },
@@ -139,7 +139,7 @@ class DesktopNavigation extends StatelessWidget {
                 ),
                 const SizedBox(width: AppSpacing.md),
                 Text(
-                  'StudentNet',
+                  'EduVision',
                   style: AppTextStyles.sectionHeading.copyWith(
                     fontWeight: FontWeight.bold,
                     color: AppColors.gray900,
@@ -186,17 +186,82 @@ class DesktopNavigation extends StatelessWidget {
           const SizedBox(height: AppSpacing.lg),
 
           // Navigation Items
+          // Expanded(
+          //   child: ListView(
+          //     padding: const EdgeInsets.symmetric(horizontal: AppSpacing.lg),
+          //     children: [
+          //       _buildNavItem(
+          //         context,
+          //         icon: Icons.home,
+          //         label: 'Home',
+          //         route: '/dashboard',
+          //         isActive: currentRoute == '/dashboard' || currentRoute == '/',
+          //       ),
+          //       _buildNavItem(
+          //         context,
+          //         icon: Icons.note_alt_outlined,
+          //         label: 'Smart Notes',
+          //         route: '/smartnotes',
+          //         isActive: currentRoute == '/smartnotes',
+          //       ),
+          //       _buildNavItem(
+          //         context,
+          //         icon: Icons.person_outline,
+          //         label: 'Profile',
+          //         route: '/profile',
+          //         isActive: currentRoute == '/profile',
+          //       ),
+          //       _buildNavItem(
+          //         context,
+          //         icon: Icons.people_outline,
+          //         label: 'Friends',
+          //         route: '/friends',
+          //         isActive: currentRoute == '/friends',
+          //       ),
+          //       _buildNavItem(
+          //         context,
+          //         icon: Icons.chat_bubble_outline,
+          //         label: 'Messages',
+          //         route: '/messages',
+          //         isActive: currentRoute == '/messages',
+          //         badgeCount: 3,
+          //       ),
+          //       _buildNavItem(
+          //         context,
+          //         icon: Icons.notifications_none,
+          //         label: 'Notifications',
+          //         route: '/notifications',
+          //         isActive: currentRoute == '/notifications',
+          //         badgeCount: 5,
+          //       ),
+          //       _buildNavItem(
+          //         context,
+          //         icon: Icons.calendar_today,
+          //         label: 'Events',
+          //         route: '/events',
+          //         isActive: currentRoute == '/events',
+          //       ),
+          //       _buildNavItem(
+          //         context,
+          //         icon: Icons.folder_open,
+          //         label: 'Resources',
+          //         route: '/resources',
+          //         isActive: currentRoute == '/resources',
+          //       ),
+          //       _buildNavItem(
+          //         context,
+          //         icon: Icons.emoji_events_outlined,
+          //         label: 'Achievements',
+          //         route: '/achievements',
+          //         isActive: currentRoute == '/achievements',
+          //       ),
+          //     ],
+          //   ),
+          // ),
           Expanded(
             child: ListView(
               padding: const EdgeInsets.symmetric(horizontal: AppSpacing.lg),
               children: [
-                _buildNavItem(
-                  context,
-                  icon: Icons.home,
-                  label: 'Home',
-                  route: '/dashboard',
-                  isActive: currentRoute == '/dashboard' || currentRoute == '/',
-                ),
                 _buildNavItem(
                   context,
                   icon: Icons.note_alt_outlined,
@@ -213,29 +278,6 @@ class DesktopNavigation extends StatelessWidget {
                 ),
                 _buildNavItem(
                   context,
-                  icon: Icons.people_outline,
-                  label: 'Friends',
-                  route: '/friends',
-                  isActive: currentRoute == '/friends',
-                ),
-                _buildNavItem(
-                  context,
-                  icon: Icons.chat_bubble_outline,
-                  label: 'Messages',
-                  route: '/messages',
-                  isActive: currentRoute == '/messages',
-                  badgeCount: 3,
-                ),
-                _buildNavItem(
-                  context,
-                  icon: Icons.notifications_none,
-                  label: 'Notifications',
-                  route: '/notifications',
-                  isActive: currentRoute == '/notifications',
-                  badgeCount: 5,
-                ),
-                _buildNavItem(
-                  context,
                   icon: Icons.calendar_today,
                   label: 'Events',
                   route: '/events',
@@ -247,13 +289,6 @@ class DesktopNavigation extends StatelessWidget {
                   label: 'Resources',
                   route: '/resources',
                   isActive: currentRoute == '/resources',
-                ),
-                _buildNavItem(
-                  context,
-                  icon: Icons.emoji_events_outlined,
-                  label: 'Achievements',
-                  route: '/achievements',
-                  isActive: currentRoute == '/achievements',
                 ),
               ],
             ),

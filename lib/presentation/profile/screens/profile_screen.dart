@@ -35,59 +35,6 @@ class ProfileScreen extends ConsumerWidget {
                 constraints: const BoxConstraints(maxWidth: 896),
                 child: Stack(
                   children: [
-                    // Spiral binding
-                    Positioned(
-                      left: 0,
-                      top: 0,
-                      bottom: 0,
-                      child: Container(
-                        width: 24,
-                        decoration: const BoxDecoration(
-                          gradient: LinearGradient(
-                            colors: [
-                              AppColors.notebookSpiral,
-                              AppColors.notebookSpiralDark,
-                            ],
-                          ),
-                          borderRadius: BorderRadius.only(
-                            topLeft: Radius.circular(AppRadius.lg),
-                            bottomLeft: Radius.circular(AppRadius.lg),
-                          ),
-                        ),
-                      ),
-                    ),
-                    // Spiral holes
-                    ...List.generate(12, (i) {
-                      return Positioned(
-                        left: 8,
-                        top:
-                            (8 + i * 8) *
-                            MediaQuery.of(context).size.height /
-                            100,
-                        child: Container(
-                          width: 8,
-                          height: 8,
-                          decoration: BoxDecoration(
-                            color: AppColors.white,
-                            shape: BoxShape.circle,
-                            border: Border.all(
-                              color: AppColors.notebookBorder,
-                              width: 1,
-                            ),
-                          ),
-                        ),
-                      );
-                    }),
-                    // Vertical line
-                    Positioned(
-                      left: 24,
-                      top: 0,
-                      bottom: 0,
-                      child: Container(
-                        width: 1,
-                        color: AppColors.notebookBorder,
-                      ),
-                    ),
                     // Main content
                     Container(
                       margin: const EdgeInsets.only(left: 32),
@@ -97,38 +44,9 @@ class ProfileScreen extends ConsumerWidget {
                           topRight: Radius.circular(AppRadius.lg),
                           bottomRight: Radius.circular(AppRadius.lg),
                         ),
-                        boxShadow: [
-                          BoxShadow(
-                            color: Colors.black.withOpacity(0.2),
-                            blurRadius: 20,
-                            offset: const Offset(0, 8),
-                          ),
-                        ],
-                        border: const Border(
-                          left: BorderSide(color: AppColors.blue200, width: 4),
-                        ),
                       ),
                       child: Stack(
                         children: [
-                          // Notebook lines background
-                          Positioned.fill(
-                            child: Opacity(
-                              opacity: 0.1,
-                              child: Column(
-                                children: List.generate(30, (i) {
-                                  return Container(
-                                    height: 1,
-                                    margin: EdgeInsets.only(
-                                      top:
-                                          MediaQuery.of(context).size.height *
-                                          0.0333,
-                                    ),
-                                    color: AppColors.notebookLines,
-                                  );
-                                }),
-                              ),
-                            ),
-                          ),
                           // Content
                           Padding(
                             padding: const EdgeInsets.all(AppSpacing.xxl),

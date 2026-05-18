@@ -170,17 +170,17 @@ class AppRadius {
 
 class SmartNotesTheme {
   // Colors
-  static const Color bgMain = Color(0xFF0D0D0D);
-  static const Color bgSecondary = Color(0xFF1A1A1A);
-  static const Color bgTertiary = Color(0xFF262626);
-  static const Color border = Color(0xFF262626);
-  static const Color textMain = Colors.white;
-  static const Color textMuted = Colors.grey;
+  static const Color bgMain = Color(0xFFFFFFFF);
+  static const Color bgSecondary = Color(0xFFF9FAFB);
+  static const Color bgTertiary = Color(0xFFF3F4F6);
+  static const Color border = Color(0xFFE5E7EB);
+  static const Color textMain = Color(0xFF111827);
+  static const Color textMuted = Color(0xFF6B7280);
   static const Color textDark = Colors.black;
-  static const Color accent = Colors.white;
-  static const Color accentBlue = Color(0xFF42A5F5);
-  static const Color iconColor = Colors.grey;
-  static const Color iconActive = Colors.white;
+  static const Color accent = Color(0xFFF3F4F6);
+  static const Color accentBlue = Color(0xFF3B82F6);
+  static const Color iconColor = Color(0xFF9CA3AF);
+  static const Color iconActive = Color(0xFF111827);
   static const Color iconDark = Colors.black;
 
   // Sizes
