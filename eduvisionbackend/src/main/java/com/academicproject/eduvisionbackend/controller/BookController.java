@@ -135,7 +135,7 @@ public class BookController {
 
             // 2. If not found locally, fetch it from Supabase Storage
             if (fileBytes == null) {
-                String downloadUrl = supabaseUrl + "/storage/v1/object/" + supabaseBucket + "/" + sanitizedFilePath;
+                String downloadUrl = supabaseUrl + "/storage/v1/object/authenticated/" + supabaseBucket + "/" + sanitizedFilePath;
                 logger.info("[book download] Fetching from Supabase Storage URL: {}", downloadUrl);
 
                 HttpHeaders headers = new HttpHeaders();
