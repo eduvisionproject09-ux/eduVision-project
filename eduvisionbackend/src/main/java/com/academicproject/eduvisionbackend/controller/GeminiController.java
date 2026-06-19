@@ -13,10 +13,10 @@ import org.springframework.web.bind.annotation.*;
 @CrossOrigin(origins = "*")
 public class GeminiController {
 
-    private final GeminiService geminiService;
+    private final GeminiService geminiService ;
 
     @PostMapping("/ask")
     public ResponseEntity<AiResponse> askAi(@RequestBody AiRequest request) {
-        return ResponseEntity.ok(geminiService.getStructuredResponse(request.getPrompt()));
+        return ResponseEntity.ok(geminiService.getStructuredResponse(request.getPrompt(), request.getStyle(), request.getLanguage()));
     }
 }

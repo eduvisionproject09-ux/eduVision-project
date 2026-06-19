@@ -50,7 +50,7 @@ public class ResourceService {
                 .getPrincipal();
 
         return userRepository
-                .findByEmail(userDetails.getUsername())
+                .findByUsername(userDetails.getUsername())
                 .orElseThrow(() -> new RuntimeException("User not found"));
     }
 

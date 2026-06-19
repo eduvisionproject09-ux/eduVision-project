@@ -9,6 +9,8 @@ final notesProvider =
       return NotesNotifier(ref.watch(noteDataSourceProvider));
     });
 
+final activeNoteIdProvider = StateProvider<int?>((ref) => null);
+
 class NotesNotifier extends StateNotifier<AsyncValue<List<Note>>> {
   final NoteRemoteDataSource _dataSource;
 
@@ -26,9 +28,23 @@ class NotesNotifier extends StateNotifier<AsyncValue<List<Note>>> {
     }
   }
 
-  Future<void> addNote(String content, String subject, String topic) async {
+  Future<void> addNote(
+    String content,
+    String subject,
+    String topic, {
+    int? parentId,
+  }) async {
     try {
-      await _dataSource.createNote(content, subject, topic);
+      await _dataSource.createNote(content, subject, topic, parentId: parentId);
+      await fetchNotes();
+    } catch (e, stack) {
+      state = AsyncValue.error(e, stack);
+    }
+  }
+
+  Future<void> createFolder(String name, {int? parentId}) async {
+    try {
+      await _dataSource.createFolder(name, parentId: parentId);
       await fetchNotes();
     } catch (e, stack) {
       state = AsyncValue.error(e, stack);

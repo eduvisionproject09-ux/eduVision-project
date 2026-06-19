@@ -6,6 +6,8 @@ class Note {
   final String subject;
   final String topic;
   final bool bookmarked;
+  final bool isFolder;
+  final int? parentId;
   final DateTime createdAt;
   final DateTime updatedAt;
   final List<Resource> resources;
@@ -16,6 +18,8 @@ class Note {
     required this.subject,
     required this.topic,
     required this.bookmarked,
+    required this.isFolder,
+    this.parentId,
     required this.createdAt,
     required this.updatedAt,
     this.resources = const [],
@@ -28,6 +32,8 @@ class Note {
       subject: json['subject'] ?? '',
       topic: json['topic'] ?? '',
       bookmarked: json['bookmarked'] ?? false,
+      isFolder: json['isFolder'] ?? false,
+      parentId: json['parentId'],
       createdAt: DateTime.parse(json['createdAt']),
       updatedAt: DateTime.parse(json['updatedAt']),
       resources: json['resources'] != null

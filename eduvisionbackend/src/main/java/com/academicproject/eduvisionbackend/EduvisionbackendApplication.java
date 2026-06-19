@@ -10,3 +10,4 @@ public class EduvisionbackendApplication {
 		SpringApplication.run(EduvisionbackendApplication.class, args);
 	}
 }
+

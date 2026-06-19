@@ -48,7 +48,6 @@ public class AuthService {
 
         userRepository.save(user);
 
-        // Auto login after signup
         return login(new LoginRequest(signupRequest.getUsername(), signupRequest.getPassword()));
     }
 

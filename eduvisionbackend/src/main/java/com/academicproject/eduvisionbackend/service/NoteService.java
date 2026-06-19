@@ -40,14 +40,24 @@ public class NoteService {
     @Transactional
     public NoteResponseDto createNote(NoteCreateDto dto) {
         User user = getCurrentUser();
-        Note note = Note.builder()
+        Note note = Note.builder()                 
                 .content(dto.getContent())
                 .subject(dto.getSubject())
                 .topic(dto.getTopic())
+                .isFolder(dto.isFolder())
+                .parentId(dto.getParentId())
                 .user(user)
                 .build();
         Note saved = noteRepository.save(note);
         return mapToDto(saved);
+    }
+
+    @Transactional(readOnly = true)
+    public List<NoteResponseDto> getAllNotesList() {
+        User user = getCurrentUser();
+        return noteRepository.findByUser(user).stream()
+                .map(this::mapToDto)
+                .collect(Collectors.toList());
     }
 
     @Transactional(readOnly = true)
@@ -72,9 +82,11 @@ public class NoteService {
         if (!note.getUser().getId().equals(getCurrentUser().getId())) {
             throw new RuntimeException("Unauthorized");
         }
+        // Only update mutable fields (content, subject, topic)
         note.setContent(dto.getContent());
         note.setSubject(dto.getSubject());
         note.setTopic(dto.getTopic());
+        
         return mapToDto(noteRepository.save(note));
     }
 
@@ -110,6 +122,8 @@ public class NoteService {
                 .subject(note.getSubject())
                 .topic(note.getTopic())
                 .bookmarked(note.isBookmarked())
+                .isFolder(note.isFolder())
+                .parentId(note.getParentId())
                 .createdAt(note.getCreatedAt())
                 .updatedAt(note.getUpdatedAt())
                 .resources(resourceDtos)

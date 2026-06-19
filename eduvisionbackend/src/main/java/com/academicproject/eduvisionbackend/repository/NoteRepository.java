@@ -11,6 +11,8 @@ import com.academicproject.eduvisionbackend.entity.User;
 public interface NoteRepository extends JpaRepository<Note, Long> {
     Page<Note> findByUser(User user, Pageable pageable);
 
+    List<Note> findByUser(User user);
+
     Page<Note> findByUserAndSubjectContainingIgnoreCaseOrTopicContainingIgnoreCase(User user, String subject,
             String topic, Pageable pageable);
 

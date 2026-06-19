@@ -1,6 +1,5 @@
 import 'package:academic_project/presentation/auth/provider/auth_provider.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widget_previews.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import '../theme/app_constants.dart';
@@ -8,10 +7,15 @@ import '../dashboard/screens/dashboard_screen.dart';
 import '../profile/screens/profile_screen.dart';
 import '../friends/screens/friends_screen.dart';
 import '../messages/screens/messages_screen.dart';
+import '../events/screens/events_screen.dart';
 import '../flutter_screens/placeholder_screens.dart';
+import '../library/screens/library_screen.dart';
 import '../smart notes/screens/smart_notes_screen.dart';
+import '../settings/screens/settings_screen.dart';
 import '../auth/screen/login_page.dart';
 import '../auth/screen/sign_up.dart';
+
+final isMainSidebarOpenProvider = StateProvider<bool>((ref) => true);
 
 // GoRouter configuration
 final routerProvider2 = Provider<GoRouter>((ref) {
@@ -54,12 +58,16 @@ final routerProvider2 = Provider<GoRouter>((ref) {
             builder: (context, state) => const EventsScreen(),
           ),
           GoRoute(
-            path: '/resources',
-            builder: (context, state) => const ResourcesScreen(),
+            path: '/library',
+            builder: (context, state) => const LibraryScreen(),
           ),
           GoRoute(
             path: '/achievements',
             builder: (context, state) => const AchievementsScreen(),
+          ),
+          GoRoute(
+            path: '/settings',
+            builder: (context, state) => const SettingsScreen(),
           ),
         ],
       ),
@@ -104,59 +112,81 @@ class MainLayout extends StatelessWidget {
   }
 }
 
-class DesktopNavigation extends StatelessWidget {
+class DesktopNavigation extends ConsumerWidget {
   const DesktopNavigation({super.key});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final currentRoute = GoRouterState.of(context).uri.path;
+    final isOpen = ref.watch(isMainSidebarOpenProvider);
 
-    return Container(
-      width: 256,
-      decoration: BoxDecoration(
-        color: AppColors.white,
-        border: const Border(right: BorderSide(color: AppColors.blue200)),
+    return AnimatedContainer(
+      duration: const Duration(milliseconds: 200),
+      width: isOpen ? 256 : 80,
+      decoration: const BoxDecoration(
+        gradient: LinearGradient(
+          begin: Alignment.topCenter,
+          end: Alignment.bottomCenter,
+          colors: [
+            AppColors.gradientStart,
+            AppColors.gradientMiddle,
+            AppColors.gradientEnd,
+          ],
+        ),
+        border: Border(right: BorderSide(color: AppColors.blue200)),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          // Logo Area
           Padding(
-            padding: const EdgeInsets.all(AppSpacing.xl),
+            padding: const EdgeInsets.symmetric(horizontal: AppSpacing.lg, vertical: AppSpacing.xl),
             child: Row(
+              mainAxisAlignment: isOpen ? MainAxisAlignment.start : MainAxisAlignment.center,
               children: [
-                Container(
-                  padding: const EdgeInsets.all(8),
-                  decoration: BoxDecoration(
-                    color: AppColors.indigo600,
-                    borderRadius: BorderRadius.circular(AppRadius.md),
+                if (isOpen) ...[
+                  Container(
+                    padding: const EdgeInsets.all(8),
+                    decoration: BoxDecoration(
+                      color: AppColors.indigo600,
+                      borderRadius: BorderRadius.circular(AppRadius.md),
+                    ),
+                    child: const Icon(
+                      Icons.menu_book,
+                      color: AppColors.white,
+                      size: 24,
+                    ),
                   ),
-                  child: const Icon(
-                    Icons.menu_book,
-                    color: AppColors.white,
-                    size: 24,
+                  const SizedBox(width: AppSpacing.md),
+                  Expanded(
+                    child: Text(
+                      'EduVision',
+                      style: AppTextStyles.sectionHeading.copyWith(
+                        fontWeight: FontWeight.bold,
+                        color: AppColors.gray900,
+                      ),
+                      overflow: TextOverflow.ellipsis,
+                    ),
                   ),
-                ),
-                const SizedBox(width: AppSpacing.md),
-                Text(
-                  'EduVision',
-                  style: AppTextStyles.sectionHeading.copyWith(
-                    fontWeight: FontWeight.bold,
-                    color: AppColors.gray900,
-                  ),
+                ],
+                IconButton(
+                  icon: Icon(isOpen ? Icons.chevron_left : Icons.menu, color: AppColors.gray700),
+                  onPressed: () => ref.read(isMainSidebarOpenProvider.notifier).state = !isOpen,
+                  tooltip: 'Toggle Navigation',
+                  splashRadius: 24,
                 ),
               ],
             ),
           ),
 
           // Search Bar
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: AppSpacing.lg),
-            child: Container(
-              padding: const EdgeInsets.symmetric(
-                horizontal: AppSpacing.md,
-                vertical: 2,
-              ),
+          if (isOpen)
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: AppSpacing.lg),
+              child: Container(
+                padding: const EdgeInsets.symmetric(
+                  horizontal: AppSpacing.md,
+                  vertical: 2,
+                ),
               decoration: BoxDecoration(
                 color: AppColors.white,
                 borderRadius: BorderRadius.circular(AppRadius.lg),
@@ -268,6 +298,7 @@ class DesktopNavigation extends StatelessWidget {
                   label: 'Smart Notes',
                   route: '/smartnotes',
                   isActive: currentRoute == '/smartnotes',
+                  isOpen: isOpen,
                 ),
                 _buildNavItem(
                   context,
@@ -275,6 +306,7 @@ class DesktopNavigation extends StatelessWidget {
                   label: 'Profile',
                   route: '/profile',
                   isActive: currentRoute == '/profile',
+                  isOpen: isOpen,
                 ),
                 _buildNavItem(
                   context,
@@ -282,13 +314,15 @@ class DesktopNavigation extends StatelessWidget {
                   label: 'Events',
                   route: '/events',
                   isActive: currentRoute == '/events',
+                  isOpen: isOpen,
                 ),
                 _buildNavItem(
                   context,
-                  icon: Icons.folder_open,
-                  label: 'Resources',
-                  route: '/resources',
-                  isActive: currentRoute == '/resources',
+                  icon: Icons.library_books,
+                  label: 'My Library',
+                  route: '/library',
+                  isActive: currentRoute == '/library',
+                  isOpen: isOpen,
                 ),
               ],
             ),
@@ -303,6 +337,7 @@ class DesktopNavigation extends StatelessWidget {
               label: 'Settings',
               route: '/settings',
               isActive: currentRoute == '/settings',
+              isOpen: isOpen,
             ),
           ),
         ],
@@ -316,6 +351,7 @@ class DesktopNavigation extends StatelessWidget {
     required String label,
     required String route,
     required bool isActive,
+    bool isOpen = true,
     int? badgeCount,
   }) {
     return Container(
@@ -341,16 +377,19 @@ class DesktopNavigation extends StatelessWidget {
                   size: 20,
                   color: isActive ? AppColors.white : AppColors.gray700,
                 ),
-                const SizedBox(width: AppSpacing.md),
-                Expanded(
-                  child: Text(
-                    label,
-                    style: AppTextStyles.bodyMedium.copyWith(
-                      color: isActive ? AppColors.white : AppColors.gray800,
-                      fontWeight: isActive ? FontWeight.w600 : FontWeight.w500,
+                if (isOpen) ...[
+                  const SizedBox(width: AppSpacing.md),
+                  Expanded(
+                    child: Text(
+                      label,
+                      style: AppTextStyles.bodyMedium.copyWith(
+                        color: isActive ? AppColors.white : AppColors.gray800,
+                        fontWeight: isActive ? FontWeight.w600 : FontWeight.w500,
+                      ),
+                      overflow: TextOverflow.ellipsis,
                     ),
                   ),
-                ),
+                ],
                 if (badgeCount != null)
                   Container(
                     padding: const EdgeInsets.symmetric(

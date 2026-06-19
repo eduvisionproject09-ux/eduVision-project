@@ -299,21 +299,26 @@ class ProfileScreen extends ConsumerWidget {
     return _buildInfoCard(
       title: 'Achievements',
       icon: Icons.emoji_events,
-      gradientColors: const [AppColors.yellow50, AppColors.orange50],
-      borderColor: AppColors.yellow200,
-      titleColor: AppColors.orange900,
+      gradientColors: const [Color(0xFFFFFBEB), Color(0xFFFFF7ED)],
+      borderColor: const Color(0xFFFDE68A),
+      titleColor: const Color(0xFF92400E),
       onEdit: () => _showAddAchievementDialog(context, ref, profile),
-      child: Column(
-        children: profile.achievements.isEmpty
-            ? [const Text('No achievements added.')]
-            : profile.achievements.map((ach) {
+      child: profile.achievements.isEmpty
+          ? _buildEmptyState(
+              'No achievements yet',
+              'Add your awards, honours, and certifications.',
+            )
+          : Column(
+              children: profile.achievements.asMap().entries.map((entry) {
+                final i = entry.key;
+                final ach = entry.value;
                 return _buildAchievementRow(
                   ach.title ?? '',
                   ach.description ?? '',
-                  Icons.emoji_events,
+                  i,
                 );
               }).toList(),
-      ),
+            ),
     );
   }
 
@@ -325,19 +330,23 @@ class ProfileScreen extends ConsumerWidget {
     return _buildInfoCard(
       title: 'Extracurricular Activities',
       icon: Icons.star,
-      gradientColors: const [AppColors.purple50, AppColors.pink50],
-      borderColor: AppColors.purple200,
-      titleColor: AppColors.purple900,
+      gradientColors: const [Color(0xFFF5F3FF), Color(0xFFFDF2F8)],
+      borderColor: const Color(0xFFDDD6FE),
+      titleColor: const Color(0xFF5B21B6),
       onEdit: () => _showAddExtracurricularDialog(context, ref, profile),
-      child: Column(
-        children: profile.extracurricularActivities.isEmpty
-            ? [const Text('No activities added.')]
-            : profile.extracurricularActivities.map((act) {
+      child: profile.extracurricularActivities.isEmpty
+          ? _buildEmptyState(
+              'No activities yet',
+              'Add clubs, sports, volunteering, or other activities.',
+            )
+          : Column(
+              children: profile.extracurricularActivities.map((act) {
                 return _buildActivityRow(
-                  'Activity Name : ${act.activityName} - Role : ${act.role}',
+                  act.activityName ?? 'Untitled',
+                  act.role ?? 'Member',
                 );
               }).toList(),
-      ),
+            ),
     );
   }
 
@@ -349,20 +358,23 @@ class ProfileScreen extends ConsumerWidget {
     return _buildInfoCard(
       title: "Today's Schedule",
       icon: Icons.access_time,
-      gradientColors: const [AppColors.indigo50, AppColors.blue50],
-      borderColor: AppColors.indigo200,
-      titleColor: AppColors.indigo900,
+      gradientColors: const [Color(0xFFEFF6FF), Color(0xFFEEF2FF)],
+      borderColor: const Color(0xFFBFDBFE),
+      titleColor: const Color(0xFF1E3A5F),
       onEdit: () => _showAddScheduleDialog(context, ref, profile),
-      child: Column(
-        children: profile.scheduleItems.isEmpty
-            ? [const Text('No schedule added.')]
-            : profile.scheduleItems.map((sch) {
+      child: profile.scheduleItems.isEmpty
+          ? _buildEmptyState(
+              'No schedule yet',
+              'Add your classes, lab sessions, and appointments.',
+            )
+          : Column(
+              children: profile.scheduleItems.map((sch) {
                 return _buildScheduleItemRow(
                   sch.time ?? '',
                   sch.courseName ?? '',
                 );
               }).toList(),
-      ),
+            ),
     );
   }
 
@@ -445,24 +457,68 @@ class ProfileScreen extends ConsumerWidget {
     );
   }
 
-  Widget _buildAchievementRow(String title, String desc, IconData icon) {
+  Widget _buildEmptyState(String title, String subtitle) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: AppSpacing.md),
+      child: Row(
+        children: [
+          Icon(Icons.add_circle_outline, color: AppColors.gray400, size: 28),
+          const SizedBox(width: AppSpacing.md),
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                title,
+                style: AppTextStyles.bodyMedium.copyWith(
+                  color: AppColors.gray500,
+                  fontWeight: FontWeight.w600,
+                ),
+              ),
+              Text(
+                subtitle,
+                style: AppTextStyles.small.copyWith(color: AppColors.gray400),
+              ),
+            ],
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildAchievementRow(String title, String desc, int index) {
+    final colors = [
+      const Color(0xFFDC2626),
+      const Color(0xFFD97706),
+      const Color(0xFF059669),
+      AppColors.indigo600,
+      const Color(0xFF7C3AED),
+    ];
+    final color = colors[index % colors.length];
+    final medals = ['🥇', '🥈', '🥉', '🏅', '⭐'];
     return Container(
       margin: const EdgeInsets.only(bottom: AppSpacing.md),
       padding: const EdgeInsets.all(AppSpacing.md),
       decoration: BoxDecoration(
-        color: AppColors.white,
+        color: Colors.white,
         borderRadius: BorderRadius.circular(AppRadius.lg),
-        border: Border.all(color: AppColors.yellow200),
+        border: Border.all(color: color.withOpacity(0.2)),
       ),
       child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Container(
-            padding: const EdgeInsets.all(AppSpacing.sm),
-            decoration: const BoxDecoration(
-              color: AppColors.yellow100,
-              shape: BoxShape.circle,
+            width: 40,
+            height: 40,
+            decoration: BoxDecoration(
+              color: color.withOpacity(0.08),
+              borderRadius: BorderRadius.circular(AppRadius.md),
             ),
-            child: Icon(icon, size: 16, color: AppColors.yellow600),
+            child: Center(
+              child: Text(
+                medals[index % medals.length],
+                style: const TextStyle(fontSize: 20),
+              ),
+            ),
           ),
           const SizedBox(width: AppSpacing.md),
           Expanded(
@@ -472,16 +528,35 @@ class ProfileScreen extends ConsumerWidget {
                 Text(
                   title,
                   style: AppTextStyles.bodyMedium.copyWith(
-                    color: AppColors.orange800,
+                    color: AppColors.gray900,
+                    fontWeight: FontWeight.w700,
                   ),
                 ),
-                Text(
-                  desc,
-                  style: AppTextStyles.small.copyWith(
-                    color: AppColors.orange600,
+                if (desc.isNotEmpty) ...[
+                  const SizedBox(height: 2),
+                  Text(
+                    desc,
+                    style: AppTextStyles.small.copyWith(
+                      color: AppColors.gray500,
+                    ),
                   ),
-                ),
+                ],
               ],
+            ),
+          ),
+          Container(
+            padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
+            decoration: BoxDecoration(
+              color: color.withOpacity(0.1),
+              borderRadius: BorderRadius.circular(12),
+            ),
+            child: Text(
+              'Achievement',
+              style: TextStyle(
+                fontSize: 10,
+                fontWeight: FontWeight.w700,
+                color: color,
+              ),
             ),
           ),
         ],
@@ -489,30 +564,64 @@ class ProfileScreen extends ConsumerWidget {
     );
   }
 
-  Widget _buildActivityRow(String text) {
+  Widget _buildActivityRow(String activityName, String role) {
     return Container(
       margin: const EdgeInsets.only(bottom: AppSpacing.sm),
-      padding: const EdgeInsets.all(AppSpacing.sm),
+      padding: const EdgeInsets.symmetric(
+        horizontal: AppSpacing.md,
+        vertical: 12,
+      ),
       decoration: BoxDecoration(
-        color: AppColors.white,
+        color: Colors.white,
         borderRadius: BorderRadius.circular(AppRadius.md),
-        border: Border.all(color: AppColors.purple200),
+        border: Border.all(color: const Color(0xFFDDD6FE)),
       ),
       child: Row(
         children: [
           Container(
-            width: 8,
-            height: 8,
-            decoration: const BoxDecoration(
-              color: AppColors.purple400,
-              shape: BoxShape.circle,
+            padding: const EdgeInsets.all(8),
+            decoration: BoxDecoration(
+              color: const Color(0xFFEDE9FE),
+              borderRadius: BorderRadius.circular(8),
+            ),
+            child: const Icon(
+              Icons.person_pin_outlined,
+              color: Color(0xFF7C3AED),
+              size: 16,
             ),
           ),
-          const SizedBox(width: AppSpacing.sm),
+          const SizedBox(width: AppSpacing.md),
           Expanded(
-            child: Text(
-              text,
-              style: AppTextStyles.small.copyWith(color: AppColors.purple800),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  activityName,
+                  style: AppTextStyles.bodyMedium.copyWith(
+                    color: AppColors.gray900,
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
+                Text(
+                  role,
+                  style: AppTextStyles.small.copyWith(color: AppColors.gray500),
+                ),
+              ],
+            ),
+          ),
+          Container(
+            padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
+            decoration: BoxDecoration(
+              color: const Color(0xFFEDE9FE),
+              borderRadius: BorderRadius.circular(12),
+            ),
+            child: const Text(
+              'Activity',
+              style: TextStyle(
+                fontSize: 10,
+                fontWeight: FontWeight.w700,
+                color: Color(0xFF7C3AED),
+              ),
             ),
           ),
         ],
@@ -523,25 +632,44 @@ class ProfileScreen extends ConsumerWidget {
   Widget _buildScheduleItemRow(String time, String subject) {
     return Container(
       margin: const EdgeInsets.only(bottom: AppSpacing.sm),
-      padding: const EdgeInsets.all(AppSpacing.sm),
+      padding: const EdgeInsets.symmetric(
+        horizontal: AppSpacing.md,
+        vertical: 10,
+      ),
       decoration: BoxDecoration(
-        color: AppColors.white,
+        color: Colors.white,
         borderRadius: BorderRadius.circular(AppRadius.md),
-        border: Border.all(color: AppColors.indigo200),
+        border: Border.all(color: const Color(0xFFBFDBFE)),
       ),
       child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Text(
-            time,
-            style: AppTextStyles.bodyMedium.copyWith(
-              color: AppColors.indigo800,
+          Container(
+            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+            decoration: BoxDecoration(
+              color: const Color(0xFFEFF6FF),
+              borderRadius: BorderRadius.circular(8),
+            ),
+            child: Text(
+              time,
+              style: const TextStyle(
+                fontSize: 12,
+                fontWeight: FontWeight.w700,
+                color: Color(0xFF1D4ED8),
+                fontFamily: 'monospace',
+              ),
             ),
           ),
-          Text(
-            subject,
-            style: AppTextStyles.small.copyWith(color: AppColors.indigo600),
+          const SizedBox(width: AppSpacing.md),
+          Expanded(
+            child: Text(
+              subject,
+              style: AppTextStyles.bodyMedium.copyWith(
+                color: AppColors.gray800,
+                fontWeight: FontWeight.w500,
+              ),
+            ),
           ),
+          Icon(Icons.chevron_right, color: AppColors.gray400, size: 18),
         ],
       ),
     );

@@ -47,7 +47,11 @@ dependencies:
   path_provider: ^2.1.5
   device_preview: ^1.1.0
   image_picker: ^1.2.2
-
+  intl: ^0.20.2
+  flutter_quill: ^11.2.0
+  flutter_drawing_board: ^1.0.1+2
+  uuid: ^4.5.3
+  syncfusion_flutter_pdfviewer: ^33.2.13
 
 dev_dependencies:
   flutter_test:

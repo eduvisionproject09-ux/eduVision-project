@@ -191,8 +191,17 @@ class SmartNotesTheme {
   static const double radiusLarge = 12.0;
 
   // Text Styles
-  static const TextStyle heading1 = TextStyle(color: textMain, fontSize: 18, fontWeight: FontWeight.bold, height: 1.2);
-  static const TextStyle heading2 = TextStyle(color: textMain, fontSize: 15, fontWeight: FontWeight.bold);
+  static const TextStyle heading1 = TextStyle(
+    color: textMain,
+    fontSize: 18,
+    fontWeight: FontWeight.bold,
+    height: 1.2,
+  );
+  static const TextStyle heading2 = TextStyle(
+    color: textMain,
+    fontSize: 15,
+    fontWeight: FontWeight.bold,
+  );
   static const TextStyle body = TextStyle(color: textMain, fontSize: 14);
   static const TextStyle bodySmall = TextStyle(color: textMain, fontSize: 13);
   static const TextStyle caption = TextStyle(color: textMuted, fontSize: 12);

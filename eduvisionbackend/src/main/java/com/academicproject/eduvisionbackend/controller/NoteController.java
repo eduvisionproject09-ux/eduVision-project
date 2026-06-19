@@ -3,6 +3,7 @@ package com.academicproject.eduvisionbackend.controller;
 import com.academicproject.eduvisionbackend.dto.NoteCreateDto;
 import com.academicproject.eduvisionbackend.dto.NoteResponseDto;
 import com.academicproject.eduvisionbackend.service.NoteService;
+import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -24,6 +25,11 @@ public class NoteController {
     @GetMapping
     public ResponseEntity<Page<NoteResponseDto>> getAllNotes(Pageable pageable) {
         return ResponseEntity.ok(noteService.getAllNotes(pageable));
+    }
+
+    @GetMapping("/all")
+    public ResponseEntity<List<NoteResponseDto>> getAllNotesList() {
+        return ResponseEntity.ok(noteService.getAllNotesList());
     }
 
     @GetMapping("/{id}")

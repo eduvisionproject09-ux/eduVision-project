@@ -12,18 +12,40 @@ class NoteRemoteDataSource {
   }
 
   Future<List<Note>> fetchNotes() async {
-    final response = await _dio.get('', options: await _getOptions());
-    final List data = response.data['content'];
+    final response = await _dio.get('/all', options: await _getOptions());
+    final List data = response.data;
     return data.map((e) => Note.fromJson(e)).toList();
   }
 
-  Future<Note> createNote(String content, String subject, String topic) async {
+  Future<Note> createNote(
+    String content,
+    String subject,
+    String topic, {
+    bool isFolder = false,
+    int? parentId,
+  }) async {
     final response = await _dio.post(
       '',
-      data: {'content': content, 'subject': subject, 'topic': topic},
+      data: {
+        'content': content,
+        'subject': subject,
+        'topic': topic,
+        'isFolder': isFolder,
+        'parentId': parentId,
+      },
       options: await _getOptions(),
     );
     return Note.fromJson(response.data);
+  }
+
+  Future<Note> createFolder(String name, {int? parentId}) async {
+    return createNote(
+      '',
+      'Folder',
+      name,
+      isFolder: true,
+      parentId: parentId,
+    );
   }
 
   Future<Note> updateNote(

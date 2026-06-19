@@ -11,17 +11,7 @@ class NotificationsScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      decoration: const BoxDecoration(
-        gradient: LinearGradient(
-          begin: Alignment.topLeft,
-          end: Alignment.bottomRight,
-          colors: [
-            AppColors.gradientStart,
-            AppColors.gradientMiddle,
-            AppColors.gradientEnd,
-          ],
-        ),
-      ),
+      color: AppColors.gray50,
       child: Center(
         child: Padding(
           padding: const EdgeInsets.all(AppSpacing.xl),
@@ -43,9 +33,7 @@ class NotificationsScreen extends StatelessWidget {
               const SizedBox(height: AppSpacing.md),
               Text(
                 'In Development',
-                style: AppTextStyles.body.copyWith(
-                  color: AppColors.gray600,
-                ),
+                style: AppTextStyles.body.copyWith(color: AppColors.gray600),
               ),
             ],
           ),
@@ -55,105 +43,10 @@ class NotificationsScreen extends StatelessWidget {
   }
 }
 
-class EventsScreen extends StatelessWidget {
-  const EventsScreen({super.key});
 
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      decoration: const BoxDecoration(
-        gradient: LinearGradient(
-          begin: Alignment.topLeft,
-          end: Alignment.bottomRight,
-          colors: [
-            AppColors.gradientStart,
-            AppColors.gradientMiddle,
-            AppColors.gradientEnd,
-          ],
-        ),
-      ),
-      child: Center(
-        child: Padding(
-          padding: const EdgeInsets.all(AppSpacing.xl),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              const Icon(
-                Icons.event,
-                size: 64,
-                color: AppColors.purple600,
-              ),
-              const SizedBox(height: AppSpacing.xl),
-              Text(
-                'Events',
-                style: AppTextStyles.studentTitle.copyWith(
-                  color: AppColors.purple900,
-                ),
-              ),
-              const SizedBox(height: AppSpacing.md),
-              Text(
-                'In Development',
-                style: AppTextStyles.body.copyWith(
-                  color: AppColors.gray600,
-                ),
-              ),
-            ],
-          ),
-        ),
-      ),
-    );
-  }
-}
 
-class ResourcesScreen extends StatelessWidget {
-  const ResourcesScreen({super.key});
 
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      decoration: const BoxDecoration(
-        gradient: LinearGradient(
-          begin: Alignment.topLeft,
-          end: Alignment.bottomRight,
-          colors: [
-            AppColors.gradientStart,
-            AppColors.gradientMiddle,
-            AppColors.gradientEnd,
-          ],
-        ),
-      ),
-      child: Center(
-        child: Padding(
-          padding: const EdgeInsets.all(AppSpacing.xl),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              const Icon(
-                Icons.folder,
-                size: 64,
-                color: AppColors.indigo600,
-              ),
-              const SizedBox(height: AppSpacing.xl),
-              Text(
-                'Resources',
-                style: AppTextStyles.studentTitle.copyWith(
-                  color: AppColors.indigo900,
-                ),
-              ),
-              const SizedBox(height: AppSpacing.md),
-              Text(
-                'In Development',
-                style: AppTextStyles.body.copyWith(
-                  color: AppColors.gray600,
-                ),
-              ),
-            ],
-          ),
-        ),
-      ),
-    );
-  }
-}
+// ─────────────────────────── ACHIEVEMENTS SCREEN ───────────────────────────
 
 class AchievementsScreen extends StatelessWidget {
   const AchievementsScreen({super.key});
@@ -161,17 +54,7 @@ class AchievementsScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      decoration: const BoxDecoration(
-        gradient: LinearGradient(
-          begin: Alignment.topLeft,
-          end: Alignment.bottomRight,
-          colors: [
-            AppColors.gradientStart,
-            AppColors.gradientMiddle,
-            AppColors.gradientEnd,
-          ],
-        ),
-      ),
+      color: AppColors.gray50,
       child: Center(
         child: Padding(
           padding: const EdgeInsets.all(AppSpacing.xl),
@@ -179,23 +62,21 @@ class AchievementsScreen extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               const Icon(
-                Icons.emoji_events,
+                Icons.emoji_events_outlined,
                 size: 64,
-                color: AppColors.yellow600,
+                color: AppColors.gray400,
               ),
               const SizedBox(height: AppSpacing.xl),
               Text(
                 'Achievements',
                 style: AppTextStyles.studentTitle.copyWith(
-                  color: AppColors.yellow900,
+                  color: AppColors.gray700,
                 ),
               ),
               const SizedBox(height: AppSpacing.md),
               Text(
                 'In Development',
-                style: AppTextStyles.body.copyWith(
-                  color: AppColors.gray600,
-                ),
+                style: AppTextStyles.body.copyWith(color: AppColors.gray500),
               ),
             ],
           ),

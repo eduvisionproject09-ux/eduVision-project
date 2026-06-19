@@ -11,10 +11,14 @@ class AiRemoteDataSource {
     return Options(headers: {'Authorization': 'Bearer $token'});
   }
 
-  Future<AiResponse> askAi(String prompt) async {
+  Future<AiResponse> askAi(String prompt, {String? style, String? language}) async {
     final response = await _dio.post(
       '/ask',
-      data: {'prompt': prompt},
+      data: {
+        'prompt': prompt,
+        'style': style,
+        'language': language,
+      },
       options: await _getOptions(),
     );
     return AiResponse.fromJson(response.data);

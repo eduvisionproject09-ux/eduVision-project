@@ -34,14 +34,21 @@ public class Note {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false, columnDefinition = "TEXT")
+    @Column(columnDefinition = "TEXT")
     private String content;
 
-    @Column(nullable = false)
+    @Column
     private String subject;
 
-    @Column(nullable = false)
+    @Column
     private String topic;
+
+    @Column(name = "is_folder", nullable = false)
+    @Builder.Default
+    private boolean isFolder = false;
+
+    @Column(name = "parent_id")
+    private Long parentId;
 
     private boolean bookmarked = false;
 

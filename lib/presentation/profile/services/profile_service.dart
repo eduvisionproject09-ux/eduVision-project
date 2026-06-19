@@ -38,8 +38,23 @@ class ProfileService {
     final token = await _getToken();
     if (token == null) throw Exception("Not authenticated");
 
+    // Detect content-type from file extension to support all image formats
+    final ext = fileName.split('.').last.toLowerCase();
+    final contentType = switch (ext) {
+      'png' => 'image/png',
+      'jpg' || 'jpeg' => 'image/jpeg',
+      'webp' => 'image/webp',
+      'gif' => 'image/gif',
+      'heic' || 'heif' => 'image/heic',
+      _ => 'application/octet-stream',
+    };
+
     FormData formData = FormData.fromMap({
-      "file": MultipartFile.fromBytes(bytes, filename: fileName),
+      "file": MultipartFile.fromBytes(
+        bytes,
+        filename: fileName,
+        contentType: DioMediaType.parse(contentType),
+      ),
     });
 
     final response = await _dio.post(

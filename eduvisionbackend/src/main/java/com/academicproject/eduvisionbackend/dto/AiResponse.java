@@ -11,6 +11,7 @@ import lombok.NoArgsConstructor;
 @Builder
 public class AiResponse {
     private String topic;
+    private String content;
     private String academicDefinition;
     private String simpleDefinition;
     private String examStandardDescription;

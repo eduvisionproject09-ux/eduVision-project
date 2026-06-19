@@ -10,14 +10,30 @@ class AiState {
   final bool isLoading;
   final AiResponse? response;
   final String? error;
+  final String selectedStyle;
+  final String selectedLanguage;
 
-  AiState({this.isLoading = false, this.response, this.error});
+  AiState({
+    this.isLoading = false, 
+    this.response, 
+    this.error,
+    this.selectedStyle = 'Academic',
+    this.selectedLanguage = 'English',
+  });
 
-  AiState copyWith({bool? isLoading, AiResponse? response, String? error}) {
+  AiState copyWith({
+    bool? isLoading, 
+    AiResponse? response, 
+    String? error,
+    String? selectedStyle,
+    String? selectedLanguage,
+  }) {
     return AiState(
       isLoading: isLoading ?? this.isLoading,
       response: response ?? this.response,
       error: error ?? this.error,
+      selectedStyle: selectedStyle ?? this.selectedStyle,
+      selectedLanguage: selectedLanguage ?? this.selectedLanguage,
     );
   }
 }
@@ -26,10 +42,22 @@ class AiNotifier extends StateNotifier<AiState> {
   final AiRemoteDataSource _dataSource;
   AiNotifier(this._dataSource) : super(AiState());
 
+  void setStyle(String style) {
+    state = state.copyWith(selectedStyle: style);
+  }
+
+  void setLanguage(String language) {
+    state = state.copyWith(selectedLanguage: language);
+  }
+
   Future<void> askAi(String prompt) async {
     state = state.copyWith(isLoading: true, error: null);
     try {
-      final aiResponse = await _dataSource.askAi(prompt);
+      final aiResponse = await _dataSource.askAi(
+        prompt, 
+        style: state.selectedStyle, 
+        language: state.selectedLanguage
+      );
       state = state.copyWith(isLoading: false, response: aiResponse);
     } catch (e) {
       String errorMessage = "Failed to get AI response. Please try again.";

@@ -14,6 +14,7 @@ class SmartNotes extends StatefulWidget {
 class _SmartNotesState extends State<SmartNotes> {
   int currentTab = 0;
   bool isEditMode = true;
+  bool isExplorerVisible = true;
 
   @override
   Widget build(BuildContext context) {
@@ -22,11 +23,13 @@ class _SmartNotesState extends State<SmartNotes> {
       body: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const SizedBox(
-            width: SmartNotesTheme.leftSidebarWidth,
-            child: SmartNotesLeftSidebar(),
-          ),
-          Container(width: 1, color: SmartNotesTheme.border),
+          if (isExplorerVisible) ...[
+            const SizedBox(
+              width: SmartNotesTheme.leftSidebarWidth,
+              child: SmartNotesLeftSidebar(),
+            ),
+            Container(width: 1, color: SmartNotesTheme.border),
+          ],
           Expanded(
             child: SmartNotesEditorArea(
               currentTab: currentTab,
@@ -41,13 +44,20 @@ class _SmartNotesState extends State<SmartNotes> {
                   isEditMode = mode;
                 });
               },
+              onToggleExplorer: () {
+                setState(() {
+                  isExplorerVisible = !isExplorerVisible;
+                });
+              },
             ),
           ),
           if (currentTab == 3) ...[
             Container(width: 1, color: SmartNotesTheme.border),
-            const SizedBox(
+            SizedBox(
               width: SmartNotesTheme.aiSidebarWidth,
-              child: SmartNotesAiSidebar(),
+              child: SmartNotesAiSidebar(
+                onClose: () => setState(() => currentTab = 0),
+              ),
             ),
           ],
         ],

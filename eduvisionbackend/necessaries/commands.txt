@@ -1,0 +1,6 @@
+.\mvnw.cmd dependency:resolve
+
+.\mvnw.cmd clean install
+
+
+.\mvnw.cmd spring-boot:run
